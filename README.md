@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Interactive AI Avatar Interface (IAAI)
 
-## Getting Started
+An interactive UI prototype for a web-based avatar application that connects to a Large Language Model (LLM), synthesizes speech, and renders responses through a lifelike animated avatar. This repository implements a frontend-first approach using **Next.js**, **TailwindCSS**, and **TypeScript**.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+- ✨ Clean, responsive UI scaffold using TailwindCSS
+- 🧠 Simulated avatar chat interface (mocked backend)
+- 🗨️ Live-rendered chat messages with user/LLM threading
+- 🔊 Placeholder for future speech synthesis integration
+- 🧑‍🎤 Avatar display section for Ready Player Me integration
+
+---
+
+## 🧱 Tech Stack
+
+- **Framework**: [Next.js 15 (App Router)](https://nextjs.org)
+- **Styling**: [TailwindCSS](https://tailwindcss.com)
+- **Language**: [TypeScript](https://www.typescriptlang.org)
+- **UI**: Responsive layout with modular components
+
+---
+
+## 📁 Folder Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+src/
+├── app/
+│   ├── page.tsx               // Main app page
+│   └── api/
+│       ├── chat/              // POST /api/chat — ChatGPT response mock
+│       └── speak/             // POST /api/speak — TTS audio mock
+├── components/                // UI components
+│   ├── Header.tsx
+│   ├── Avatar.tsx
+│   ├── ChatArea.tsx
+│   └── InputBar.tsx
+├── layout/
+│   └── Layout.tsx
+├── mock/
+│   └── chatMock.ts
+└── styles/
+└── globals.css
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerequisites
 
-## Learn More
+- Node.js `>= 18`
+- Yarn (preferred)
 
-To learn more about Next.js, take a look at the following resources:
+### Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Clone the repo
+git clone https://github.com/your-username/iaai-ui.git
+cd iaai-ui
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Install dependencies
+yarn install
 
-## Deploy on Vercel
+# Start the dev server
+yarn dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📤 API Routes
+
+| Endpoint          | Description                         |
+| ----------------- | ----------------------------------- |
+| `POST /api/chat`  | Simulates ChatGPT-style response    |
+| `POST /api/speak` | Simulates speech synthesis response |
+
+> These endpoints return mocked data and are ready to be replaced with real API calls to OpenAI and Eleven Labs.
+
+---
+
+## 📌 Next Steps
+
+- ✅ Finalize mock-based rendering workflow
+- 🔄 Replace `/api/chat` with OpenAI API integration
+- 🔈 Connect `/api/speak` to Eleven Labs / Google TTS
+- 🧑‍🎨 Embed avatar via Ready Player Me with lip sync
+- 🧠 Implement RAG-based context injection via LangChain
+
+---
+
+## 🔐 Environment Variables
+
+When integrating real APIs, create a `.env.local` file:
+
+```env
+OPENAI_API_KEY=your-key-here
+ELEVENLABS_API_KEY=your-key-here
+```
+
+Use `process.env` in your server-side handlers to securely access secrets.
+
+---
+
+## 👨‍💻 Author
+
+Created by [@Mike](https://github.com/MikeBlakeway) — built for rapid prototyping and LLM experimentation.
+
+---
+
+## 📄 License
+
+MIT License. Use freely with attribution.
