@@ -1,4 +1,3 @@
-// src/app/page.tsx
 'use client'
 
 import { useState } from 'react'
@@ -18,20 +17,47 @@ export default function Home() {
     { sender: 'avatar', message: 'Hello! How can I assist you today?' },
   ])
 
-  const handleSendMessage = (text: string) => {
-    // Add user message
-    const userMsg: ChatMessage = { sender: 'user', message: text }
-    setChat((prev) => [...prev, userMsg])
+  const [loading, setLoading] = useState(false)
 
-    // Simulate avatar response
-    setTimeout(() => {
-      const botReply: ChatMessage = {
-        sender: 'avatar',
-        message: `That's a great question about "${text}". Here's a mock reply.`,
-      }
-      setChat((prev) => [...prev, botReply])
-    }, 600)
+const handleSendMessage = async (userText: string) => {
+  if (!userText.trim()) return
+
+  const userMsg = { sender: 'user' as const, message: userText }
+  const thinkingMsg = { sender: 'avatar' as const, message: 'Thinking…' }
+
+  // 1. Add user message and placeholder
+  setChat(prev => [...prev, userMsg, thinkingMsg])
+  setLoading(true)
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userText }),
+    })
+
+    const data = await res.json()
+    const reply = data.reply ?? 'Sorry, I didn’t understand that.'
+
+    // 2. Replace last avatar message (the "Thinking...") with actual reply
+    setChat(prev => [
+      ...prev.slice(0, -1),
+      { sender: 'avatar', message: reply },
+    ])
+  } catch (err) {
+    console.error('Chat error:', err)
+
+    // Replace placeholder with error message
+    setChat(prev => [
+      ...prev.slice(0, -1),
+      { sender: 'avatar', message: 'Oops! Something went wrong.' },
+    ])
+  } finally {
+    setLoading(false)
   }
+}
+
+
 
   return (
     <Layout>
@@ -40,6 +66,7 @@ export default function Home() {
         <Avatar />
         <ChatArea messages={chat} />
         <InputBar onSend={handleSendMessage} />
+        {loading && <p className="text-sm text-gray-400">Thinking…</p>}
       </main>
     </Layout>
   )

@@ -2,12 +2,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const { message } = await req.json()
+  try {
+    const { message } = await req.json()
 
-  // Simulated ChatGPT response
-  const fakeReply = `You said: "${message}". Here's a helpful response.`
+    const res = await fetch('http://localhost:11434/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'llama3',
+        prompt: message,
+        stream: false,
+      }),
+    })
 
-  return NextResponse.json({
-    reply: fakeReply,
-  })
+    const data = await res.json()
+
+    return NextResponse.json({ reply: data.response })
+  } catch (err) {
+    console.error('LLaMA error:', err)
+    return NextResponse.json({ error: 'Local LLM error' }, { status: 500 })
+  }
 }
