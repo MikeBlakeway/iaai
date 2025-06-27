@@ -2,14 +2,17 @@
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const { message } = await req.json()
+  const { message, voiceMode = false } = await req.json()
+
+  const voicePromptIntro = `Speak naturally and conversationally. Avoid formatting, markdown, lists, or code blocks. Imagine you're speaking aloud to a human.\n\n`
+  const finalPrompt = voiceMode ? voicePromptIntro + message : message
 
   const streamRes = await fetch('http://localhost:11434/api/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: 'llama3',
-      prompt: message,
+      prompt: finalPrompt,
       stream: true
     })
   })

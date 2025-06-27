@@ -2,6 +2,8 @@
 import { useState } from 'react'
 import { readStreamLines } from '@/utils/readStreamLines'
 import { markMessageAsComplete } from '@/utils/markMessageAsComplete'
+import { useTextToSpeech } from './useTextToSpeech'
+import { SmartTTSBatcher } from '@/utils/smartTTSBatcher'
 
 export interface ChatMessage {
   sender: 'user' | 'avatar'
@@ -13,8 +15,16 @@ export function useChat() {
   const [completedIndexes, setCompletedIndexes] = useState<Set<number>>(new Set())
   const [loading, setLoading] = useState(false)
 
+  const { queueSpeech } = useTextToSpeech()
+
   const sendMessage = async (userText: string) => {
     if (!userText.trim()) return
+
+    const batcher = new SmartTTSBatcher({
+      onSpeak: queueSpeech,
+      maxSentences: 5,
+      forceDelayMs: 1500
+    })
 
     setChat(prev => [...prev, { sender: 'user', message: userText }])
 
@@ -30,11 +40,12 @@ export function useChat() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userText })
+        body: JSON.stringify({ message: userText, voiceMode: true })
       })
 
       await readStreamLines(res.body, json => {
         if (json.response) {
+          batcher.push(json.response)
           setChat(prev => {
             const updated = [...prev]
             const existing = updated[avatarIndex]
@@ -49,6 +60,7 @@ export function useChat() {
         }
       })
 
+      batcher.flush()
       markMessageAsComplete(avatarIndex, completedIndexes, setCompletedIndexes)
     } catch (err) {
       console.error('Streaming error:', err)
