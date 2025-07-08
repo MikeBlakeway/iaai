@@ -7,3 +7,4 @@ __pycache__/
 
 # Ignore assets folder (e.g., videos, images)
 assets/
+tmp/
