@@ -1,4 +1,9 @@
+accelerate
+diffusers[torch]
 fastapi
-uvicorn[standard]
-python-multipart
+huggingface_hub
+moviepy
 pillow
+python-multipart
+transformers
+uvicorn[standard]

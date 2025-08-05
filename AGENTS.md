@@ -13,10 +13,10 @@ The monorepo currently contains two main applications:
    * Web interface for users to interact with AI features
    * Features include: voice-enabled chatbot, image-to-video generation, avatar-based UI
 
-2. **itv-api/** (FastAPI Python backend)
+2. **api/image-to-video/** (FastAPI Python backend)
 
    * API service responsible for handling avatar generation tasks
-   * Connects with image-to-video models (AnimateDiff or placeholders)
+   * Connects with image-to-video models (currently mocked via `model_stub.py`)
 
 All subprojects are structured to support eventual deployment and integration with AI agents such as OpenAI Codex.
 
@@ -57,13 +57,13 @@ apps/
 │   │   └── utils/            # Utilities (e.g., batching, highlight parsing)
 │   └── tsconfig.json        # Frontend-specific TypeScript config
 ├── api/
-│   └── image-to-video/       # FastAPI service for AnimateDiff
+│   └── image-to-video/       # FastAPI service for image-to-video generation
 │       ├── app/
 │       │   ├── api.py        # API endpoints
 │       │   ├── core.py       # Core business logic
 │       │   └── main.py       # FastAPI app instance
 │       ├── models/
-│       │   └── model_stub.py # Placeholder or inference module
+│       │   └── model_stub.py # Placeholder or inference module (AnimateDiff mock)
 │       ├── assets/           # Temp storage for test/demo files (excluded in .gitignore)
 │       ├── requirements.txt  # Python dependencies
 │       ├── Makefile          # Developer workflow
@@ -86,16 +86,20 @@ packages/
 
 All README.md files in apps/ and packages/ should be local to their respective context.
 
-Future agents should reference paths as apps/frontend/..., packages/shared/..., etc.
+Future agents should reference paths as apps/frontend/..., apps/api/image-to-video/..., packages/shared/..., etc.
 
 ---
 
 ## Integrated AI Models
 
-### AnimateDiff (Planned via ComfyUI)
+### AnimateDiff (Currently Mocked via `model_stub.py`)
 
 * **Purpose**: Converts a still image and motion prompt into a short video
-* **Integration Plan**:
+* **Current Implementation**:
+
+  * Mocked using a stub video file in `model_stub.py`
+  * API endpoints simulate video generation for frontend integration
+* **Future Integration Plan**:
 
   * Model will run on a locally-hosted ComfyUI instance
   * API endpoint `/generate` will POST an image and action string
@@ -145,11 +149,12 @@ When operating Codex or any AI agents over this monorepo:
 
 ## Known Constraints & TODOs
 
-* AnimateDiff integration is currently mocked via a video stub (see `model_stub.py`)
+* AnimateDiff integration is currently mocked via a video stub (`model_stub.py`)
 * The `.venv` environment and video assets are gitignored
 * Future versions will:
 
-  * Integrate OpenVoice as a local TTS system
+  * Integrate ComfyUI-based AnimateDiff model in `api/image-to-video`
+  * Integrate OpenVoice as a local TTS system in `packages/tts`
   * Replace video stubs with ComfyUI-generated outputs
 
 ---
@@ -160,13 +165,13 @@ To run everything locally:
 
 ```bash
 # Setup backend
-cd itv-api
+cd api/image-to-video
 make init  # creates venv
 make install  # installs deps
 make dev  # launches FastAPI with Uvicorn
 
 # Setup frontend
-cd ../frontend
+cd ../../frontend
 pnpm install
 pnpm dev
 ```

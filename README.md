@@ -5,7 +5,7 @@ A monorepo for the **Interactive AI Avatar Interface (IAAI)**, designed to integ
 * 🎙️ Voice-to-voice communication with sentiment-driven tone modulation
 * 🧠 Locally hosted LLM responses via Ollama
 * 🗣️ TTS via OpenVoice or other local models
-* 🎬 Image-to-video generation using ComfyUI or AnimateDiff
+* 🎬 Image-to-video generation using AnimateDiff (mocked via ComfyUI `model_stub.py`)
 * 🤖 Agent support via OpenAI Codex using an `AGENTS.md` file
 
 ---
@@ -27,7 +27,7 @@ A monorepo for the **Interactive AI Avatar Interface (IAAI)**, designed to integ
 │   │       │   └── main.py
 │   │       ├── assets/              # Local video/image assets (ignored by Git)
 │   │       ├── models
-│   │       │   └── model_stub.py
+│   │       │   └── model_stub.py    # AnimateDiff mock model
 │   │       ├── Makefile
 │   │       ├── requirements.txt
 │   │       └── README.md
@@ -76,7 +76,7 @@ cd apps/frontend
 npm run dev
 
 # Run API backend
-cd ../api
+cd ../api/image-to-video
 make dev  # uses .venv and uvicorn
 ```
 
@@ -99,17 +99,20 @@ Codex agents can interrogate this repo using `AGENTS.md`, which includes detaile
 * **llm/**: Streaming Ollama interface, OpenAI abstraction
 * **rag/**: LangChain chains, context stores (Chroma, FAISS)
 * **shared/**: TS types, text utilities, parsers, constants
+* **apps/api/image-to-video/**: AnimateDiff-based image-to-video API (currently mocked via `model_stub.py`), planned ComfyUI support
+* Future AI model integrations and shared logic will be added under `packages/`
 
 ---
 
 ## ✅ TODOs
 
 * [x] Frontend: Image upload, action selector, video preview
-* [x] Backend: `/generate` endpoint with stub logic
-* [ ] Integrate AnimateDiff or ComfyUI via local inference
+* [x] Backend: `/generate` endpoint with stub logic for AnimateDiff
+* [ ] Integrate full AnimateDiff inference pipeline (currently mocked)
+* [ ] Add ComfyUI integration for image-to-video generation
 * [ ] Add audio pipeline (TTS + STT + prosody control)
 * [ ] Voice cloning and emotion tuning via OpenVoice
-* [ ] Full AGENTS.md coverage for Codex agents
+* [ ] Complete AGENTS.md coverage for Codex agents
 
 ---
 
