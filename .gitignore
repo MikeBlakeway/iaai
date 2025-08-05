@@ -1,0 +1,29 @@
+# Node
+node_modules/
+dist/
+.next/
+out/
+*.log
+npm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+env/
+venv/
+.Python
+*.egg-info/
+*.egg
+
+# Editors
+.DS_Store
+.vscode/
+.idea/
+
+# Env / Secrets
+.env
+.env.local
+
+# Videos / assets
+apps/api/image-to-video/assets/
