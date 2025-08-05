@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+/tmp/
+.env
+.venv/
+.DS_Store
+
+# Ignore assets folder (e.g., videos, images)
+assets/
+tmp/
